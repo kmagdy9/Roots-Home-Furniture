@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roots Home Furniture - Quotation</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --main-color: #66937A; 
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f4f7f5;
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* تنسيق الأزرار العام */
+        button {
+            background-color: var(--main-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(102, 147, 122, 0.2);
+        }
+
+        button:hover {
+            background-color: #557d66;
+            transform: translateY(-2px);
+        }
+
+        .btn-delete {
+            background-color: #e74c3c;
+            padding: 8px 12px;
+            box-shadow: none;
+        }
+        .btn-delete:hover { 
+            background-color: #c0392b; 
+            transform: translateY(0);
+        }
+
+        /* زرار الإضافة الاحترافي تحت الجدول */
+        .btn-add {
+            background-color: transparent;
+            color: var(--main-color);
+            border: 2px dashed var(--main-color);
+            width: 100%;
+            margin-bottom: 30px;
+            font-weight: bold;
+            box-shadow: none;
+        }
+
+        .btn-add:hover {
+            background-color: rgba(102, 147, 122, 0.05);
+            transform: translateY(0);
+        }
+
+        /* حاوية زرار الحفظ في الأسفل */
+        .bottom-controls {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn-save {
+            font-size: 18px;
+            padding: 15px 40px;
+            box-shadow: 0 6px 15px rgba(102, 147, 122, 0.3);
+        }
+
+        /* حاوية عرض السعر */
+        .quotation-container {
+            background-color: var(--bg-color);
+            width: 100%;
+            max-width: 800px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-top: 8px solid var(--main-color);
+            box-sizing: border-box;
+            border-radius: 4px;
+        }
+
+        /* الهيدر واللوجو */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header img {
+            width: 120px;
+            height: auto;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+            animation: fadeDown 1.2s ease-out;
+        }
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            color: var(--main-color);
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: 2px;
+        }
+
+        /* معلومات العميل */
+        .customer-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px dashed var(--main-color);
+            gap: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .input-group label {
+            font-weight: bold;
+            color: var(--main-color);
+            white-space: nowrap;
+        }
+
+        input[type="text"], input[type="date"], input[type="number"], textarea {
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            border-radius: 4px;
+            font-family: 'Tajawal', sans-serif;
+            outline: none;
+            transition: border 0.3s ease;
+            font-size: 15px;
+            color: var(--text-color);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--main-color);
+        }
+
+        /* حاوية الجدول للموبايل */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 15px;
+        }
+
+        /* جدول الأسعار */
+        table {
+            width: 100%;
+            min-width: 650px; /* بيجبر الجدول يحتفظ بعرضه عشان الخانات متصغرش أوي ع الموبايل */
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: var(--main-color);
+            color: white;
+            padding: 12px;
+            text-align: right;
+            border: 1px solid var(--main-color);
+        }
+
+        td {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        td input[type="text"], td textarea, td input[type="number"] {
+            width: 100%;
+            box-sizing: border-box;
+            border: none;
+            background: transparent;
+            resize: none;
+        }
+
+        td textarea {
+            height: 60px;
+            overflow: hidden;
+        }
+
+        /* تنسيقات الإجماليات والخصم */
+        .subtotal-row td, .discount-row td {
+            background-color: #fafafa;
+            font-weight: bold;
+        }
+
+        .discount-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .discount-container i {
+            color: var(--main-color);
+            font-size: 16px;
+        }
+
+        .discount-row input {
+            border: 1px solid var(--border-color);
+            padding: 5px;
+            width: 70px;
+            text-align: center;
+            border-radius: 4px;
+            background-color: white;
+        }
+
+        .total-row td {
+            font-weight: bold;
+            font-size: 18px;
+            color: var(--main-color);
+            background-color: #f4f7f5;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .footer-note {
+            background-color: #f4f7f5;
+            border-right: 4px solid var(--main-color);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #444;
+            font-size: 15px;
+            border-radius: 4px 0 0 4px;
+        }
+
+        .footer-note i {
+            color: var(--main-color);
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .footer-thanks {
+            text-align: center;
+            margin-top: 15px;
+            color: var(--main-color);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .footer-thanks i {
+            font-size: 18px;
+        }
+
+        .footer-thanks strong {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+
+        /* تنسيق حقوق الملكية */
+        .website-copyright {
+            margin-top: 40px;
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            font-family: 'Tajawal', sans-serif;
+            width: 100%;
+            padding-bottom: 20px;
+            direction: ltr;
+        }
+
+        /* --- الموبايل (Responsive Design) --- */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .quotation-container {
+                padding: 20px 15px;
+            }
+            header img {
+                width: 90px;
+            }
+            header h1 {
+                font-size: 24px;
+            }
+            .customer-info {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .input-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            .btn-save {
+                width: 100%;
+                font-size: 16px;
+                padding: 15px;
+            }
+            .footer-note {
+                align-items: flex-start;
+            }
+            .footer-thanks {
+                flex-direction: column;
+                text-align: center;
+                gap: 5px;
+            }
+        }
+
+        /* تنسيقات الطباعة واستخراج الـ PDF */
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            @page {
+                size: A4 portrait;
+                margin: 0; 
+            }
+            body {
+                background-color: white;
+                margin: 0;
+                padding: 15mm; 
+            }
+            body * {
+                visibility: hidden;
+            }
+            #quotation, #quotation * {
+                visibility: visible;
+            }
+            #quotation {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+                padding: 20px;
+                box-shadow: none;
+                border-top: 8px solid var(--main-color);
+            }
+            .no-print {
+                display: none !important;
+            }
+            .table-responsive {
+                overflow-x: visible; /* تعطيل السكرول في الطباعة */
+            }
+            table {
+                min-width: 100%; /* عشان ياخد عرض الورقة في الطباعة */
+            }
+            input, textarea {
+                border: none !important;
+                background: transparent !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                resize: none !important;
+                color: #000 !important;
+            }
+            .discount-row input {
+                border: none !important;
+                background: transparent !important;
+                padding: 0 !important;
+                width: 30px;
+            }
+            th:nth-child(1), td:nth-child(1) { width: 30%; }
+            th:nth-child(2), td:nth-child(2) { width: 50%; }
+            th:nth-child(3), td:nth-child(3) { width: 20%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="quotation" class="quotation-container">
+        <header>
+            <img src="Roots Home Furniture.jpg" alt="Roots Logo" onerror="this.style.display='none'">
+            <h1>Roots Home Furniture</h1>
+        </header>
+
+        <div class="customer-info">
+            <div class="input-group">
+                <label>اسم العميل:</label>
+                <input type="text" id="customerName" placeholder="أدخل اسم العميل...">
+            </div>
+            <div class="input-group">
+                <label>تاريخ التسليم:</label>
+                <input type="date" id="deliveryDate">
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table id="quoteTable">
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">البند</th>
+                        <th style="width: 50%;">التفاصيل</th>
+                        <th style="width: 15%;">السعر (ج.م)</th>
+                        <th style="width: 10%;" class="no-print">إجراء</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr>
+                        <td><input type="text" placeholder="مثال: طقم أنتريه"></td>
+                        <td><textarea placeholder="أدخل تفاصيل ومقاسات البند..."></textarea></td>
+                        <td><input type="number" class="price-input" placeholder="0" onkeyup="calculateTotal()"></td>
+                        <td class="no-print" style="text-align: center;">
+                            <button class="btn-delete" onclick="deleteRow(this)"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="subtotal-row">
+                        <td colspan="2" style="text-align: left;">الإجمالي:</td>
+                        <td colspan="2"><span id="subTotal">0</span> جنيه</td>
+                    </tr>
+                    <tr class="discount-row">
+                        <td colspan="2" style="text-align: left; vertical-align: middle;">نسبة الخصم:</td>
+                        <td colspan="2">
+                            <div class="discount-container">
+                                <input type="number" id="discountInput" placeholder="0" min="0" max="100" onkeyup="calculateTotal()">
+                                <i class="fas fa-percent"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="total-row">
+                        <td colspan="2" style="text-align: left;">الإجمالي الكلي:</td>
+                        <td colspan="2"><span id="totalPrice">0</span> جنيه</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <button class="btn-add no-print" onclick="addRow()"><i class="fas fa-plus"></i> إضافة بند جديد</button>
+
+        <div class="footer">
+            <div class="footer-note">
+                <i class="fas fa-clipboard-check"></i>
+                <div>
+                    <strong>ملاحظة هامة:</strong> يُرجى التفضل بمراجعة كافة التفاصيل والمقاسات بدقة، حيث يتم التصنيع والتنفيذ بناءً على المواصفات المذكورة أعلاه.
+                </div>
+            </div>
+            
+            <div class="footer-thanks">
+                <i class="fas fa-handshake"></i>
+                <span>خالص الشكر لثقتكم واختياركم <strong>Roots Home Furniture</strong></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-controls no-print">
+        <button class="btn-save" onclick="generatePDF()"><i class="fas fa-file-pdf"></i> حفظ الكوتيشن (PDF)</button>
+    </div>
+
+    <div class="website-copyright no-print">
+        &copy; Copyright 2026. All Rights Reserved | created by Khaled Magdy
+    </div>
+
+    <script>
+        function addRow() {
+            const tbody = document.getElementById('tableBody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td><input type="text" placeholder="البند..."></td>
+                <td><textarea placeholder="التفاصيل..."></textarea></td>
+                <td><input type="number" class="price-input" placeholder="0" onkeyup="calculateTotal()"></td>
+                <td class="no-print" style="text-align: center;">
+                    <button class="btn-delete" onclick="deleteRow(this)"><i class="fas fa-trash"></i></button>
+                </td>
+            `;
+            tbody.appendChild(newRow);
+        }
+
+        function deleteRow(btn) {
+            const row = btn.closest('tr');
+            row.remove();
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            let subtotal = 0;
+            const prices = document.querySelectorAll('.price-input');
+            prices.forEach(input => {
+                const val = parseFloat(input.value);
+                if (!isNaN(val)) {
+                    subtotal += val;
+                }
+            });
+            document.getElementById('subTotal').innerText = subtotal;
+
+            let discountPercentage = parseFloat(document.getElementById('discountInput').value) || 0;
+            
+            if (discountPercentage > 100) {
+                discountPercentage = 100;
+                document.getElementById('discountInput').value = 100;
+            } else if (discountPercentage < 0) {
+                discountPercentage = 0;
+                document.getElementById('discountInput').value = 0;
+            }
+
+            let discountAmount = subtotal * (discountPercentage / 100);
+            let total = Math.round(subtotal - discountAmount);
+            
+            if (total < 0) total = 0; 
+            
+            document.getElementById('totalPrice').innerText = total;
+        }
+
+        function generatePDF() {
+            const customerName = document.getElementById('customerName').value.trim();
+            const deliveryDate = document.getElementById('deliveryDate').value;
+            
+            if (customerName === "") {
+                alert("⚠️ برجاء إدخال اسم العميل أولاً.");
+                document.getElementById('customerName').focus();
+                return;
+            }
+
+            if (deliveryDate === "") {
+                alert("⚠️ برجاء تحديد تاريخ التسليم.");
+                document.getElementById('deliveryDate').focus();
+                return;
+            }
+
+            let hasValidItem = false;
+            const itemInputs = document.querySelectorAll('#tableBody tr td:first-child input'); 
+            
+            itemInputs.forEach(input => {
+                if (input.value.trim() !== "") {
+                    hasValidItem = true;
+                }
+            });
+
+            if (!hasValidItem) {
+                alert("⚠️ برجاء إدخال بند واحد على الأقل في الجدول قبل الحفظ.");
+                return;
+            }
+
+            const element = document.getElementById('quotation');
+            const inputs = element.querySelectorAll('input, textarea');
+            
+            inputs.forEach(input => {
+                if(input.tagName === 'TEXTAREA') {
+                    input.innerHTML = input.value;
+                    input.style.height = 'auto';
+                    input.style.height = input.scrollHeight + 'px';
+                } else {
+                    input.setAttribute('value', input.value);
+                }
+            });
+
+            const originalTitle = document.title;
+            document.title = customerName + " Roots Home Furniture - Quotation";
+
+            window.print();
+
+            setTimeout(() => {
+                document.title = originalTitle;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
