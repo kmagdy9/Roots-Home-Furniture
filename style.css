@@ -9,6 +9,10 @@
     --shadow-lg: 0 10px 30px rgba(0,0,0,0.08);
 }
 
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Tajawal', sans-serif;
     background-color: var(--light-bg);
@@ -28,7 +32,6 @@ body {
     padding: 40px;
     box-shadow: var(--shadow-lg);
     border-top: 8px solid var(--main-color);
-    box-sizing: border-box;
     border-radius: 12px;
     animation: fadeIn 0.8s ease-out;
 }
@@ -75,12 +78,43 @@ header img {
     to { opacity: 1; transform: translateY(0); }
 }
 
-header h1 {
+/* تنسيقات اللوجو الجديد */
+.brand-logo {
+    margin: 10px 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.2;
+}
+
+.roots-text {
     font-family: 'Playfair Display', serif;
-    color: var(--main-color);
-    margin: 0;
-    font-size: 32px;
-    letter-spacing: 1px;
+    font-size: 52px;
+    font-weight: 700;
+    /* تدرج لوني يعبر عن الجذور: من البني الخشبي الداكن إلى الأخضر الزرعي */
+    background: linear-gradient(to right, #5A4D41, var(--main-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 3px;
+    padding-bottom: 5px;
+}
+
+.furniture-text {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 14px;
+    color: var(--text-color);
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    font-weight: 700;
+    opacity: 0.8;
+}
+
+.brand-line {
+    width: 50px;
+    height: 3px;
+    background-color: var(--accent-color);
+    margin: 12px auto 0;
+    border-radius: 2px;
 }
 
 /* العناوين الفرعية للأقسام */
@@ -140,7 +174,6 @@ input[type="text"], input[type="date"], input[type="number"], textarea {
     font-size: 15px;
     color: var(--text-color);
     width: 100%;
-    box-sizing: border-box;
 }
 
 /* إخفاء أسهم الأرقام */
@@ -356,7 +389,7 @@ button {
     text-align: center;
 }
 
-/* رسالة الشكر */
+/* رسالة الشكر وتنسيق اللوجو المصغر بداخلها */
 .thank-you-msg {
     text-align: center;
     color: var(--main-color);
@@ -365,9 +398,32 @@ button {
     margin-top: 40px;
     font-family: 'Playfair Display', serif;
     direction: ltr;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .thank-you-msg i { color: var(--accent-color); margin-left: 8px; }
+
+.footer-brand {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    vertical-align: middle;
+    margin: 0 8px;
+    line-height: 1;
+}
+
+.footer-brand .roots-text {
+    font-size: 32px;
+    padding-bottom: 0;
+}
+
+.footer-brand .furniture-text {
+    font-size: 10px;
+    letter-spacing: 4px;
+}
 
 /* الفوتر وأزرار الحفظ */
 .bottom-controls {
@@ -409,7 +465,6 @@ button {
     .quotation-container { padding: 20px; border-radius: 0; border-top: 6px solid var(--main-color); }
     .customer-info-grid { grid-template-columns: 1fr; gap: 15px; }
     .input-group label { width: 100px; }
-    header h1 { font-size: 26px; }
     
     #quoteTable { border: none; background: transparent; }
     #quoteTable thead { display: none; } 
@@ -447,6 +502,9 @@ button {
     .btn-delete { width: 100%; padding: 12px; font-size: 16px; }
     
     .totals-table { max-width: 100%; margin: 0 auto 30px; }
+    
+    .thank-you-msg { font-size: 18px; }
+    .footer-brand .roots-text { font-size: 26px; }
 }
 
 /* === إعدادات الطباعة للـ PDF === */
@@ -467,9 +525,13 @@ button {
     thead { display: table-header-group; }
     tfoot { display: table-footer-group; }
     
-    header { margin-bottom: 15px; }
-    header img { width: 70px; margin-bottom: 5px; box-shadow: none; }
-    header h1 { font-size: 20px; }
+    /* === تعديلات اللوجو الجديد في الطباعة === */
+    header { margin-bottom: 25px; } /* زيادة المساحة السفلية قليلاً لتناسب الحجم الجديد */
+    header img { 
+        width: 100px; /* تم تكبير اللوجو من 70 إلى 100 ليكون أوضح وأجمل للعين */
+        margin-bottom: 10px; 
+        box-shadow: none; 
+    }
     
     .section-title { font-size: 14px; margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-top: 5px; }
     .customer-info-grid { margin-bottom: 15px; gap: 8px; }
@@ -486,7 +548,7 @@ button {
     /* إخفاء الأيقونات من العناوين في الطباعة عشان متاخدش مساحة */
     #quoteTable th i { display: none !important; }
     
-    /* إضافة !important للنسب عشان نجبر المتصفح يطبقها على الـ th والـ td مع بعض */
+    /* تحديد النسب المئوية للأعمدة */
     #quoteTable th:nth-child(1), #quoteTable td:nth-child(1) { width: 20% !important; } /* Name */
     #quoteTable th:nth-child(2), #quoteTable td:nth-child(2) { width: 28% !important; } /* Description */
     #quoteTable th:nth-child(3), #quoteTable td:nth-child(3) { width: 7% !important; }  /* Qty */
@@ -525,4 +587,122 @@ button {
     .terms-list li { font-size: 12px; margin-bottom: 6px; }
     
     .thank-you-msg { font-size: 16px; margin-top: 20px; }
+
+    /* إضافات الطباعة للوجو الجديد وتوحيد الشكل في الـ PDF */
+    .brand-logo { margin-top: 10px !important; }
+
+    .roots-text {
+        /* إجبار المتصفح على طباعة التدرج اللوني بنفس مقاس الموقع */
+        background: linear-gradient(to right, #5A4D41, var(--main-color)) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        color: transparent !important;
+    }
+
+    .furniture-text {
+        /* أخذ الحجم الطبيعي للكلمة 14px */
+        color: var(--text-color) !important;
+        -webkit-text-fill-color: var(--text-color) !important;
+    }
+
+    /* إظهار الخط الديكوري اللي كان مخفي */
+    .brand-line {
+        display: block !important;
+        background-color: var(--accent-color) !important;
+        margin: 12px auto 0 !important;
+    }
+
+    /* تظبيط مقاس اللوجو المصغر اللي في الفوتر (رسالة الشكر) */
+    .footer-brand {
+        display: inline-flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        margin: 0 6px !important;
+        vertical-align: middle !important;
+    }
+
+    .footer-brand .roots-text {
+        font-size: 24px !important;
+    }
+
+    .footer-brand .furniture-text {
+        font-size: 10px !important;
+        letter-spacing: 4px !important;
+    }
+
+    .footer-brand .brand-line {
+        display: none !important; /* إخفاء الخط في الفوتر فقط عشان المساحة */
+    }
+}
+
+/* === تصميم نافذة التنبيهات (Modal) === */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-20px);
+    transition: all 0.3s ease;
+    border-top: 6px solid #e74c3c;
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateY(0);
+}
+
+.error-icon {
+    font-size: 50px;
+    color: #e74c3c;
+    margin-bottom: 15px;
+}
+
+.modal-content h2 {
+    margin: 0 0 10px;
+    color: var(--text-color);
+    font-size: 22px;
+}
+
+.modal-content p {
+    color: #555;
+    font-size: 18px;
+    margin-bottom: 25px;
+    direction: ltr; /* لضبط النص الإنجليزي */
+    font-weight: 500;
+}
+
+.btn-modal-close {
+    background-color: #e74c3c;
+    color: white;
+    padding: 10px 30px;
+    font-size: 16px;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.btn-modal-close:hover {
+    background-color: #c0392b;
 }

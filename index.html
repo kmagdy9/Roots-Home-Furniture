@@ -21,7 +21,11 @@
                         <div class="print-header-space"></div>
                         <header>
                             <img src="Roots Home Furniture.jpg" alt="Roots Logo" onerror="this.style.display='none'">
-                            <h1>Roots Home Furniture</h1>
+                            <h1 class="brand-logo">
+                                <span class="roots-text">Roots</span>
+                                <span class="furniture-text">Home Furniture</span>
+                            </h1>
+                            <div class="brand-line"></div>
                         </header>
                     </td>
                 </tr>
@@ -33,19 +37,19 @@
                         <div class="section-title"><i class="fas fa-address-card"></i> Client Info</div>
                         <div class="customer-info-grid">
                             <div class="input-group">
-                                <label>Client name :</label>
+                                <label for="customerName">Client name :</label>
                                 <input type="text" id="customerName" placeholder="Enter name...">
                             </div>
                             <div class="input-group">
-                                <label>Date :</label>
+                                <label for="quoteDate">Date :</label>
                                 <input type="date" id="quoteDate">
                             </div>
                             <div class="input-group">
-                                <label>Quotation No :</label>
+                                <label for="quoteNo">Quotation No :</label>
                                 <input type="text" id="quoteNo" placeholder="#0000">
                             </div>
                             <div class="input-group">
-                                <label>Phone :</label>
+                                <label for="customerPhone">Phone :</label>
                                 <input type="text" id="customerPhone" placeholder="Phone number...">
                             </div>
                         </div>
@@ -60,24 +64,12 @@
                                         <th><i class="fas fa-sort-numeric-up-alt"></i> Qty</th>
                                         <th><i class="fas fa-palette"></i> Color</th>
                                         <th><i class="fas fa-tag"></i> Price</th>
-                                        <th><i class="fas fa-percentage"></i> Discount</th>
+                                        <th><i class="fas fa-money-bill-wave"></i> Discount</th>
                                         <th><i class="fas fa-coins"></i> Total</th>
                                         <th style="text-align: center;" class="no-print"><i class="fas fa-cog"></i> Action</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tableBody">
-                                    <tr>
-                                        <td data-label="Name"><input type="text" placeholder="Item name..."></td>
-                                        <td data-label="Description"><textarea placeholder="Details..."></textarea></td>
-                                        <td data-label="Qty"><input type="number" class="qty-input" value="1" min="1" onkeyup="calculateTotal()" onchange="calculateTotal()"></td>
-                                        <td data-label="Color"><input type="text" placeholder="Color..."></td>
-                                        <td data-label="Price"><input type="number" class="price-input" placeholder="0" onkeyup="calculateTotal()" onchange="calculateTotal()"></td>
-                                        <td data-label="Discount"><input type="number" class="discount-input" placeholder="0" onkeyup="calculateTotal()" onchange="calculateTotal()"></td>
-                                        <td data-label="Total" class="row-total">0</td>
-                                        <td data-label="Action" class="no-print" style="text-align: center;">
-                                            <button class="btn-delete" onclick="deleteRow(this)"><i class="fas fa-trash"></i></button>
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -92,7 +84,7 @@
                                     <td><span id="subTotal">0</span> EGP</td>
                                 </tr>
                                 <tr>
-                                    <td>Delivery Date :</td>
+                                    <td><label for="deliveryDate">Delivery Date :</label></td>
                                     <td><input type="date" id="deliveryDate"></td>
                                 </tr>
                                 <tr>
@@ -121,7 +113,12 @@
                         </div>
                         
                         <div class="thank-you-msg">
-                            Thank You For choosing Roots Home Furniture <i class="fas fa-seedling"></i>
+                            Thank You For choosing 
+                            <span class="footer-brand">
+                                <span class="roots-text">Roots</span>
+                                <span class="furniture-text">Home Furniture</span>
+                            </span>
+                            <i class="fas fa-seedling"></i>
                         </div>
                         
                         <div class="print-footer-space"></div>
@@ -132,12 +129,26 @@
         </table>
     </div>
 
-    <div class="bottom-controls no-print">
-        <button class="btn-save" onclick="generatePDF()"><i class="fas fa-file-pdf"></i> حفظ الكوتيشن (PDF)</button>
+    <div class="bottom-controls no-print" style="gap: 15px;">
+        <button class="btn-delete" onclick="clearData()" style="padding: 15px 30px; font-size: 16px; border-radius: 30px; display: flex; align-items: center; justify-content: center;">
+            <i class="fas fa-broom" style="margin-left: 8px;"></i> مسح البيانات
+        </button>
+        <button class="btn-save" onclick="generatePDF()">
+            <i class="fas fa-file-pdf"></i> حفظ الكوتيشن (PDF)
+        </button>
     </div>
 
     <div class="website-copyright no-print">
-        &copy; Copyright 2026. All Rights Reserved | created by Khaled Magdy
+        &copy; Copyright 2026. All Rights Reserved | created by Naira Asem
+    </div>
+
+    <div id="validationModal" class="modal-overlay no-print">
+        <div class="modal-content">
+            <i class="fas fa-exclamation-circle error-icon"></i>
+            <h2>تنبيه</h2>
+            <p id="modalMessage">Please fill the required field.</p>
+            <button onclick="closeModal()" class="btn-modal-close">حسناً</button>
+        </div>
     </div>
 
     <script src="script.js"></script>
