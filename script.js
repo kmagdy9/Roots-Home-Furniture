@@ -145,7 +145,7 @@ function showInputError(elementId) {
     }, 2000);
 }
 
-// دوال التحكم في النافذة المنبثقة
+// دوال النافذة المنبثقة
 function showModal(message) {
     document.getElementById('modalMessage').innerText = message;
     document.getElementById('validationModal').classList.add('active');
@@ -155,7 +155,7 @@ function closeModal() {
     document.getElementById('validationModal').classList.remove('active');
 }
 
-// دالة الطباعة المعدلة
+// دالة الطباعة ومراجعة البيانات
 function generatePDF() {
     const customerName = document.getElementById('customerName').value.trim();
     const quoteDate = document.getElementById('quoteDate').value;
