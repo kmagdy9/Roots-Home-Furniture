@@ -10,21 +10,59 @@ function escapeHTML(str) {
 
 function createRowHTML(name = '', desc = '', qty = '1', color = '', price = '', discount = '') {
     return `
-        <td data-label="Name"><input type="text" class="name-input" placeholder="Item name..." value="${escapeHTML(name)}"></td>
-        <td data-label="Description"><textarea class="desc-input" placeholder="Details...">${escapeHTML(desc)}</textarea></td>
+        <td data-label="Name"><textarea class="name-input" placeholder="Item name..." rows="1">${escapeHTML(name)}</textarea></td>
+        <td data-label="Description"><textarea class="desc-input" placeholder="Details..." rows="2">${escapeHTML(desc)}</textarea></td>
         <td data-label="Qty"><input type="number" class="qty-input" value="${escapeHTML(qty)}" min="1"></td>
-        <td data-label="Color"><input type="text" class="color-input" placeholder="Color..." value="${escapeHTML(color)}"></td>
+        <td data-label="Color"><textarea class="color-input" placeholder="Color..." rows="1">${escapeHTML(color)}</textarea></td>
         <td data-label="Price"><input type="number" class="price-input" placeholder="0" value="${escapeHTML(price)}" min="0"></td>
         <td data-label="Discount"><input type="number" class="discount-input" placeholder="0" value="${escapeHTML(discount)}" min="0"></td>
         <td data-label="Total" class="row-total">0</td>
         <td data-label="Action" class="no-print" style="text-align: center;">
-            <button class="btn-delete"><i class="ph ph-trash"></i></button>
+            <button class="btn-delete"><i class="fas fa-trash"></i></button> 
         </td>
     `;
 }
 
+function validateTableRows() {
+    const rows = document.querySelectorAll('#tableBody tr');
+    for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const rowNum = i + 1; 
+        
+        const name = row.querySelector('.name-input');
+        if (!name.value.trim()) return { valid: false, el: name, msg: `Please fill Name in item ${rowNum}` };
+
+        const desc = row.querySelector('.desc-input');
+        if (!desc.value.trim()) return { valid: false, el: desc, msg: `Please fill Description in item ${rowNum}` };
+
+        const qty = row.querySelector('.qty-input');
+        if (!qty.value.trim() || qty.value <= 0) return { valid: false, el: qty, msg: `Please enter Quantity in item ${rowNum}` };
+
+        const color = row.querySelector('.color-input');
+        if (!color.value.trim()) return { valid: false, el: color, msg: `Please fill Color in item ${rowNum}` };
+
+        const price = row.querySelector('.price-input');
+        if (!price.value.trim() || price.value === '') return { valid: false, el: price, msg: `Please enter Price in item ${rowNum}` };
+
+        const discount = row.querySelector('.discount-input');
+        if (!discount.value.trim() || discount.value === '') return { valid: false, el: discount, msg: `Please enter Discount in item ${rowNum} (Enter 0 if none)` };
+    }
+    return { valid: true };
+}
+
 function addRow(name, desc, qty, color, price, discount) {
+    const isManualAdd = (name === undefined && desc === undefined);
     const tbody = document.getElementById('tableBody');
+    
+    if (isManualAdd && tbody.children.length > 0) {
+        const validation = validateTableRows();
+        if (!validation.valid) {
+            showModal(validation.msg);
+            showInputError(validation.el);
+            return; 
+        }
+    }
+
     const newRow = document.createElement('tr');
     newRow.style.animation = "fadeIn 0.3s ease-out";
     newRow.innerHTML = createRowHTML(name, desc, qty, color, price, discount);
@@ -116,8 +154,12 @@ function loadData() {
             if (tbody.children.length === 0) addRow();
         }
     } else {
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('quoteDate').value = today;
+        const now = new Date();
+        const dd = String(now.getDate()).padStart(2, '0');
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const yyyy = now.getFullYear();
+        document.getElementById('quoteDate').value = `${dd}-${mm}-${yyyy}`;
+        
         if (tbody.children.length === 0) addRow();
     }
 }
@@ -129,8 +171,10 @@ function clearData() {
     }
 }
 
-function showInputError(elementId) {
-    const el = document.getElementById(elementId);
+function showInputError(elementOrId) {
+    const el = typeof elementOrId === 'string' ? document.getElementById(elementOrId) : elementOrId;
+    if (!el) return;
+
     const parentGroup = el.closest('.floating-group');
     const targetEl = parentGroup ? parentGroup : el;
 
@@ -141,11 +185,10 @@ function showInputError(elementId) {
     
     setTimeout(() => {
         targetEl.style.boxShadow = "";
-        targetEl.style.borderColor = "transparent";
+        targetEl.style.borderColor = "";
     }, 2000);
 }
 
-// دوال النافذة المنبثقة
 function showModal(message) {
     document.getElementById('modalMessage').innerText = message;
     document.getElementById('validationModal').classList.add('active');
@@ -155,7 +198,15 @@ function closeModal() {
     document.getElementById('validationModal').classList.remove('active');
 }
 
-// دالة الطباعة ومراجعة البيانات
+function parseDateString(dateStr) {
+    if (!dateStr) return new Date(0);
+    const parts = dateStr.split('-');
+    if (parts.length === 3) {
+        return new Date(parts[2], parts[1] - 1, parts[0]);
+    }
+    return new Date(dateStr); 
+}
+
 function generatePDF() {
     const customerName = document.getElementById('customerName').value.trim();
     const quoteDate = document.getElementById('quoteDate').value;
@@ -193,14 +244,27 @@ function generatePDF() {
         return;
     }
 
-    const qDateObj = new Date(quoteDate);
-    const dDateObj = new Date(deliveryDate);
+    const qDateObj = parseDateString(quoteDate);
+    const dDateObj = parseDateString(deliveryDate);
     qDateObj.setHours(0,0,0,0);
     dDateObj.setHours(0,0,0,0);
 
     if (dDateObj < qDateObj) {
         showModal("Delivery Date cannot be before Date!");
         showInputError('deliveryDate');
+        return;
+    }
+
+    const tableValidation = validateTableRows();
+    if (!tableValidation.valid) {
+        showModal(tableValidation.msg);
+        showInputError(tableValidation.el);
+        return;
+    }
+
+    const rows = document.querySelectorAll('#tableBody tr');
+    if (rows.length === 0) {
+        showModal("Please add at least one item to the quotation.");
         return;
     }
 
@@ -257,4 +321,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const quotationForm = document.getElementById('quotation');
     quotationForm.addEventListener('input', saveData);
     quotationForm.addEventListener('change', saveData);
+
+    const quoteNoInput = document.getElementById('quoteNo');
+    quoteNoInput.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, ''); 
+    });
+
+    const phoneInput = document.getElementById('customerPhone');
+    phoneInput.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);
+    });
+
+    flatpickr(".date-picker", {
+        dateFormat: "d-m-Y", 
+        disableMobile: "true", 
+        animate: true
+    });
 });
