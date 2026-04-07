@@ -304,6 +304,49 @@ function generatePDF() {
     }, 300);
 }
 
+function sendToWhatsApp() {
+    const customerName = document.getElementById('customerName').value.trim();
+    const quoteNo = document.getElementById('quoteNo').value.trim();
+    let phone = document.getElementById('customerPhone').value.trim();
+
+    if (!customerName) {
+        showModal("برجاء إدخال اسم العميل قبل الإرسال عبر الواتساب.");
+        showInputError('customerName');
+        return;
+    }
+
+    const rows = document.querySelectorAll('#tableBody tr');
+    if (rows.length === 0) {
+        showModal("برجاء إضافة منتج واحد على الأقل.");
+        return;
+    }
+
+    // بناء الرسالة الاحترافية والموجزة
+    let message = `تحية طيبة أستاذ/ة ${customerName}،\n\n`;
+    message += `يسعدنا تواصلكم مع Roots Home Furniture. بناءً على طلبكم، نرفق لسيادتكم عرض السعر (رقم: ${quoteNo || 'غير محدد'}).\n\n`;
+    message += `يرجى العلم أن كافة التفاصيل، المواصفات، الأسعار، وشروط التعاقد موضحة بالكامل في ملف الـ PDF المرفق مع هذه الرسالة.\n\n`;
+    message += `نحن سعداء بخدمتكم، ولا تترددوا في التواصل معنا لأي استفسار أو توضيح.\n\n`;
+    message += `مع خالص التحيات،\n*فريق Roots Home Furniture*`;
+
+    // معالجة رقم الهاتف
+    let waPhone = phone;
+    if (waPhone.startsWith('01') && waPhone.length === 11) {
+        waPhone = '2' + waPhone; 
+    } else if (waPhone.startsWith('+')) {
+        waPhone = waPhone.replace('+', ''); 
+    }
+
+    const encodedMessage = encodeURIComponent(message);
+    
+    let whatsappUrl = '';
+    if (waPhone) {
+        whatsappUrl = `https://wa.me/${waPhone}?text=${encodedMessage}`;
+    } else {
+        whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+    }
+
+    window.open(whatsappUrl, '_blank');
+}
 document.addEventListener("DOMContentLoaded", () => {
     loadData();
 

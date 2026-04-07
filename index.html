@@ -131,10 +131,15 @@
         </table>
     </div>
 
-    <div class="bottom-controls no-print" style="gap: 15px;">
+    <div class="bottom-controls no-print" style="gap: 15px; flex-wrap: wrap;">
         <button class="btn-delete" onclick="clearData()" style="padding: 15px 30px; font-size: 16px; border-radius: 30px; display: flex; align-items: center; justify-content: center;">
             <i class="fas fa-broom" style="margin-left: 8px;"></i> مسح البيانات
         </button>
+        
+        <button class="btn-whatsapp" onclick="sendToWhatsApp()">
+            <i class="fab fa-whatsapp" style="margin-left: 8px; font-size: 20px;"></i> إرسال عبر واتساب
+        </button>
+
         <button class="btn-save" onclick="generatePDF()">
             <i class="fas fa-file-pdf"></i> حفظ الكوتيشن (PDF)
         </button>
